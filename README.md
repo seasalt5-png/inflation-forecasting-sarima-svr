@@ -25,7 +25,6 @@ Two approaches are compared:
 | **Source** | [BPS Provinsi Lampung](https://lampung.bps.go.id/en/statistics-table/2/MSMy/laju-inflasi-kota-bandar-lampung.html) |
 | **Period** | January 2006 – December 2025 |
 | **Total** | 240 monthly records |
-| **Download** | [Integrated CSV](https://drive.google.com/file/d/1IpQSx3EJT6AEaS6t6oRwpSJk5i66L1_1/view?usp=drive_link) |
 
 > Data was downloaded year-by-year from BPS and merged programmatically — the integration process is documented in the notebook.
 
