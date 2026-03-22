@@ -1,112 +1,87 @@
-# 📈 Inflation Forecasting — SARIMA vs SVR
-**Monthly Inflation Rate Forecasting for Bandar Lampung City (2006–2025)**
+# Inflation Rate Forecasting — Bandar Lampung
+### Comparing SARIMA and SVR for Monthly Inflation Prediction (2006–2025)
 
-![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Notebook-Jupyter-orange?logo=jupyter&logoColor=white)
-![Platform](https://img.shields.io/badge/Platform-Google%20Colab-F9AB00?logo=googlecolab&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python)
+![Jupyter](https://img.shields.io/badge/Jupyter-Notebook-orange?logo=jupyter)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
-
-This project compares the performance of **SARIMA** (Seasonal Autoregressive Integrated Moving Average) and **SVR** (Support Vector Regression) for forecasting monthly inflation rates in Bandar Lampung City, using data sourced from BPS (Badan Pusat Statistik) Lampung Province.
-
-> Final project — Data Science Program, Institut Teknologi Sumatera (ITERA) · 2026
 
 ---
 
-## 📁 Project Structure
+## What is this project about?
+
+This project tries to answer a simple question:
+> *"Can we predict next month's inflation rate in Bandar Lampung — and which algorithm does it better?"*
+
+Two approaches are compared:
+- **SARIMA** — a classical statistical model designed for seasonal time series
+- **SVR** (Support Vector Regression) — a machine learning model that handles non-linear patterns
+
+---
+
+## Dataset
+
+| | |
+|---|---|
+| **Source** | [BPS Provinsi Lampung](https://lampung.bps.go.id/en/statistics-table/2/MSMy/laju-inflasi-kota-bandar-lampung.html) |
+| **Period** | January 2006 – December 2025 |
+| **Total** | 240 monthly records |
+| **Download** | [Integrated CSV](https://drive.google.com/file/d/1IpQSx3EJT6AEaS6t6oRwpSJk5i66L1_1/view?usp=drive_link) |
+
+> Data was downloaded year-by-year from BPS and merged programmatically — the integration process is documented in the notebook.
+
+---
+
+## Workflow
 
 ```
-inflation-forecasting-sarima-svr/
-├── sarima_svr_inflation.ipynb              # Main notebook (full pipeline)
-├── dataset/
-│   ├── inflation_2006.csv                  # Raw yearly CSV files from BPS
-│   ├── inflation_2007.csv
-│   ├── ...
-│   └── inflation_bandar_lampung_2006_2025.csv  # Merged master dataset (auto-generated)
-├── outputs/
-│   ├── inflation_trend_bandar_lampung.png  # Time series visualization
-│   ├── acf_pacf_plot.png                   # ACF and PACF plots
-│   ├── sarima_diagnostics.png              # SARIMA residual diagnostics
-│   ├── sarima_forecast.png                 # SARIMA actual vs predicted
-│   ├── svr_forecast.png                    # SVR actual vs predicted
-│   └── sarima_vs_svr_comparison.png        # Side-by-side comparison plot
+Data Integration → Preprocessing → EDA → Stationarity Test
+→ SARIMA Modeling → SVR Modeling → Evaluation & Comparison
+```
+
+---
+
+## Forecast Results
+
+![Comparison Plot](images/comparison_plot.png)
+
+---
+
+## Evaluation
+
+| Metric | SARIMA | SVR |
+|--------|--------|-----|
+| RMSE | 0.5905 | **0.5146** ✅ |
+| SMAPE | 118.10% | **103.43%** ✅ |
+
+**SVR wins on both metrics.**
+
+> *Note: SMAPE is used instead of standard MAPE because the inflation data contains near-zero and negative values (deflation), which cause MAPE to produce unreliably large numbers.*
+
+---
+
+## Key Takeaways
+
+- Bandar Lampung's inflation has a clear **12-month seasonal pattern** — prices tend to spike around Ramadan/Eid and dip after holiday seasons.
+- **SARIMA** is stable and interpretable, but too smooth — it misses extreme spikes and deflation events.
+- **SVR** adapts better to the non-linear and volatile nature of inflation data.
+- Both models still struggle with near-zero values — a known limitation of univariate forecasting on highly volatile data.
+
+---
+
+## Repository Structure
+
+```
+├── sarima_svr_inflation_bandar_lampung.ipynb   # Main notebook
+├── inflation_bandar_lampung_2006_2025.csv      # Merged dataset
+├── images/                                     # All plots
 └── README.md
 ```
 
 ---
 
-## 🔬 Methodology
+## Tech Stack
 
-| Stage | Details |
-|---|---|
-| **Data source** | Monthly inflation rate, Bandar Lampung, 2006–2025 (BPS Lampung) |
-| **Preprocessing** | Missing value interpolation · IQR-based outlier detection |
-| **Stationarity test** | Augmented Dickey-Fuller (ADF) test · First-order differencing if needed |
-| **SARIMA** | Order selection via ACF/PACF · Ljung-Box residual diagnostic · 95% confidence interval |
-| **SVR** | RBF kernel · Lag features: lag 1, 2, 3, 12 (seasonal) · Grid Search (C, γ, ε) |
-| **Evaluation metrics** | RMSE · MAE · MAPE with interpretation |
-| **Train/test split** | 80% training · 20% testing (chronological) |
+`Python` `pandas` `numpy` `matplotlib` `seaborn` `statsmodels` `pmdarima` `scikit-learn`
 
 ---
 
-## 🔧 Requirements
-
-Install required libraries with:
-
-```bash
-pip install pandas numpy matplotlib seaborn scikit-learn statsmodels
-```
-
-> The notebook is designed to run on **Google Colab**. No local environment setup is needed.
-
----
-
-## 🚀 How to Run
-
-1. Upload your raw dataset files to Google Drive at the following path:
-   ```
-   My Drive/Dataset/inflation_rate_bandar_lampung/
-   ```
-
-2. Open `sarima_svr_inflation.ipynb` in **Google Colab**
-
-3. Run all cells from top to bottom:
-   ```
-   Runtime → Run all
-   ```
-
-4. All outputs (plots and merged CSV) will be automatically saved back to your Drive folder.
-
----
-
-## 📊 Results
-
-> Update this table after running the notebook with your actual values.
-
-| Metric | SARIMA | SVR |
-|---|---|---|
-| RMSE | — | — |
-| MAE | — | — |
-| MAPE (%) | — | — |
-| MAPE Interpretation | — | — |
-| **Best Model** | — | — |
-
-**MAPE Criteria (Lewis, 1982):**
-- `< 10%` → Highly Accurate
-- `10–20%` → Good Forecast
-- `20–50%` → Reasonable Forecast
-- `> 50%` → Inaccurate
-
----
-
-## 📚 References
-
-1. Rizki, M. I. & Taqiyyuddin, T. A. (2021) — *Penerapan Model SARIMA untuk Memprediksi Tingkat Inflasi di Indonesia*. Jurnal Sains Matematika dan Statistika, 7(2), 62–72.
-2. Hendayanti, N. P. N. & Nurhidayati, M. (2020) — *Perbandingan Metode SARIMA dengan SVR dalam Memprediksi Jumlah Kunjungan Wisatawan Mancanegara ke Bali*. Jurnal Varian, 3(2), 149–162.
-3. Isnaeni R., Sudarmin, S. & Rais, Z. (2022) — *Analisis SVR dengan Kernel RBF untuk Memprediksi Laju Inflasi di Indonesia*. VARIANSI, 4(1), 30–38.
-4. Ruliana, R. et al. (2024) — *Implementation of the SVR Method in Inflation Prediction in Makassar City*. ARRUS Journal of Mathematics and Applied Science, 4(1), 28–35.
-5. Ramadhan, G. L. et al. (2021) — *Peramalan Inflasi Indonesia dengan SARIMA*. Sistemasi, 10(3), 627–636.
-6. Yahya, A. (2022) — *Peramalan IHK Indonesia Menggunakan Metode SARIMA*. Jurnal Gaussian, 11(2), 313–322.
-
----
-
-*Made with ♥ by Sarah Wasti · Institut Teknologi Sumatera · 2026*
